@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { IoEye, IoCopy, IoCheckmark } from "react-icons/io5";
 import GradientBackground, { gradientBackgroundCode } from "../components_backgrounds/bg1";
+import FloatingParticlesBackground, { floatingParticlesBackgroundCode } from "../components_backgrounds/bg2";
 
 interface BackgroundItem {
   id: string;
@@ -24,6 +25,13 @@ export default function Gallery() {
       description: "Simple animated gradient background that cycles through beautiful colors",
       component: GradientBackground,
       code: gradientBackgroundCode,
+    },
+    {
+      id: "floating-particles",
+      name: "Floating Particles",
+      description: "Dark ambient background with floating particles and mouse-following gradient overlay",
+      component: FloatingParticlesBackground,
+      code: floatingParticlesBackgroundCode,
     },
   ];
 
@@ -49,55 +57,11 @@ export default function Gallery() {
     const Component = background.component;
 
     return (
-      <motion.div
-        className="group bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden border-2 border-gray-600 hover:border-gray-400 transition-all duration-300 shadow-xl hover:shadow-2xl"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        whileHover={{ y: -10, scale: 1.02 }}
-        transition={{ duration: 0.3 }}
-      >
+      <div className="bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden border-2 border-gray-600 shadow-xl">
         {/* Preview Container */}
         <div className="h-48 overflow-hidden border-b-2 border-gray-600">
-          {/* Mini preview of the background */}
           <div className="w-full h-full">
             <Component />
-          </div>
-          
-          {/* Hover Overlay */}
-          <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
-            <motion.button
-              onClick={() => handlePreview(background.id)}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-lg border border-blue-400"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <IoEye className="w-4 h-4" />
-              <span>Preview</span>
-            </motion.button>
-            
-            <motion.button
-              onClick={() => handleCopy(background.id, background.code)}
-              className={`px-4 py-2 rounded-lg flex items-center space-x-2 transition-all shadow-lg ${
-                isCopied 
-                  ? 'bg-green-500 hover:bg-green-600 text-white border border-green-400' 
-                  : 'bg-purple-500 hover:bg-purple-600 text-white border border-purple-400'
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {isCopied ? (
-                <>
-                  <IoCheckmark className="w-4 h-4" />
-                  <span>Copied!</span>
-                </>
-              ) : (
-                <>
-                  <IoCopy className="w-4 h-4" />
-                  <span>Copy</span>
-                </>
-              )}
-            </motion.button>
           </div>
         </div>
 
@@ -106,29 +70,41 @@ export default function Gallery() {
           <h3 className="text-xl font-bold text-white mb-2">{background.name}</h3>
           <p className="text-gray-300 text-sm leading-relaxed mb-4">{background.description}</p>
           
-          {/* Usage example */}
-          <div className="bg-gray-900 rounded-lg p-3 mb-4 border border-gray-700">
-            <code className="text-green-400 text-xs">
-              &lt;GradientBackground&gt;{"\n"}
-              {"  "}&lt;YourContent /&gt;{"\n"}
-              &lt;/GradientBackground&gt;
-            </code>
+          {/* Action Buttons */}
+          <div className="flex space-x-4 mb-4">
+            <button
+              onClick={() => handlePreview(background.id)}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow-lg border border-blue-400"
+            >
+              <IoEye className="w-4 h-4" />
+              <span>Preview</span>
+            </button>
+            
+            <button
+              onClick={() => handleCopy(background.id, background.code)}
+              className={`px-4 py-2 rounded-lg flex items-center space-x-2 shadow-lg w-24 justify-center ${
+                isCopied 
+                  ? 'bg-green-500 text-white border border-green-400' 
+                  : 'bg-purple-500 text-white border border-purple-400'
+              }`}
+            >
+              {isCopied ? (
+                <>
+                  <IoCheckmark className="w-4 h-4" />
+                  <span>✓</span>
+                </>
+              ) : (
+                <>
+                  <IoCopy className="w-4 h-4" />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
           </div>
           
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2">
-            <span className="px-3 py-1 bg-blue-500/30 text-blue-300 rounded-full text-xs font-medium border border-blue-500/50">
-              Gradient
-            </span>
-            <span className="px-3 py-1 bg-purple-500/30 text-purple-300 rounded-full text-xs font-medium border border-purple-500/50">
-              Animated
-            </span>
-            <span className="px-3 py-1 bg-green-500/30 text-green-300 rounded-full text-xs font-medium border border-green-500/50">
-              Simple
-            </span>
-          </div>
+
         </div>
-      </motion.div>
+      </div>
     );
   };
 
@@ -189,8 +165,7 @@ export default function Gallery() {
               >
                 <motion.button
                   onClick={() => setCurrentBackground(null)}
-                  className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full shadow-lg border-2 border-red-400"
-                  whileHover={{ scale: 1.05 }}
+                  className="bg-red-500 text-white px-6 py-3 rounded-full shadow-lg border-2 border-red-400"
                   whileTap={{ scale: 0.95 }}
                 >
                   ✕ Close Preview
