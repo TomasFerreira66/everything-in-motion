@@ -5,6 +5,7 @@ import { useState } from "react";
 import { IoEye, IoCopy, IoCheckmark } from "react-icons/io5";
 import GradientBackground, { gradientBackgroundCode } from "../components_backgrounds/bg1";
 import FloatingParticlesBackground, { floatingParticlesBackgroundCode } from "../components_backgrounds/bg2";
+import AuroraBorealisBackground, { auroraBorealisBackgroundCode } from "../components_backgrounds/bg3";
 
 interface BackgroundItem {
   id: string;
@@ -18,7 +19,7 @@ export default function Gallery() {
   const [currentBackground, setCurrentBackground] = useState<string | null>(null);
   const [copiedStates, setCopiedStates] = useState<{ [key: string]: boolean }>({});
 
-  const backgrounds: BackgroundItem[] = [
+   const backgrounds: BackgroundItem[] = [
     {
       id: "gradient-moving",
       name: "Moving Gradient",
@@ -33,6 +34,13 @@ export default function Gallery() {
       component: FloatingParticlesBackground,
       code: floatingParticlesBackgroundCode,
     },
+    {
+      id: "geometric-waves",
+      name: "Geometric Waves",
+      description: "Modern tech-inspired background with animated geometric shapes, gradients, and grid patterns",
+      component: AuroraBorealisBackground,
+      code: auroraBorealisBackgroundCode,
+    }
   ];
 
   const handlePreview = (backgroundId: string) => {
@@ -52,9 +60,23 @@ export default function Gallery() {
     }
   };
 
+  const getComponentName = (backgroundId: string) => {
+    switch (backgroundId) {
+      case 'gradient-moving':
+        return 'GradientBackground';
+      case 'floating-particles':
+        return 'FloatingParticlesBackground';
+      case 'geometric-waves':
+        return 'GeometricWavesBackground';
+      default:
+        return 'Background';
+    }
+  };
+
   const BackgroundCard = ({ background }: { background: BackgroundItem }) => {
     const isCopied = copiedStates[background.id];
     const Component = background.component;
+    const componentName = getComponentName(background.id);
 
     return (
       <div className="bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden border-2 border-gray-600 shadow-xl">
@@ -102,7 +124,14 @@ export default function Gallery() {
             </button>
           </div>
           
-
+          {/* Usage example */}
+          <div className="bg-gray-900 rounded-lg p-3 border border-gray-700">
+            <code className="text-green-400 text-xs">
+              &lt;{componentName}&gt;{"\n"}
+              {"  "}&lt;YourContent /&gt;{"\n"}
+              &lt;/{componentName}&gt;
+            </code>
+          </div>
         </div>
       </div>
     );
